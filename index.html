@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>For You ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  background:
+    radial-gradient(circle at 20% 20%, #ffffff22 2px, transparent 3px),
+    radial-gradient(circle at 70% 15%, #ffffff33 2px, transparent 3px),
+    linear-gradient(#040b2e,#010515);
+  background-size:200px 200px,260px 260px,100% 100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family: Arial, sans-serif;
+  color:white;
+  overflow:hidden;
+}
+
+/* พระจันทร์ */
+.moon{
+  position:absolute;
+  top:8%;
+  right:12%;
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:#fff7cf;
+  box-shadow:0 0 35px #fff7cf;
+}
+
+/* ===== ทะเล (แก้ใหม่ ไม่บัค) ===== */
+.sea{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:40%;
+  background:linear-gradient(#045a8d,#022c4a);
+  overflow:hidden;
+}
+
+/* ผิวน้ำ */
+.sea::before{
+  content:"";
+  position:absolute;
+  top:-20px;
+  left:0;
+  width:200%;
+  height:120%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.12) 20%, transparent 21%) 0 0/120px 40px,
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.08) 20%, transparent 21%) 60px 20px/120px 40px;
+  animation:waveMove 14s linear infinite;
+}
+
+@keyframes waveMove{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+
+/* กล่องข้อความ */
+.card{
+  z-index:10;
+  text-align:center;
+  max-width:90%;
+}
+
+h1{font-size:2.6rem;}
+h2{font-size:2.2rem;}
+p{font-size:1.6rem;}
+
+/* fade */
+.fade{
+  animation:fade 4s forwards;
+}
+@keyframes fade{
+  0%{opacity:0;}
+  20%{opacity:1;}
+  80%{opacity:1;}
+  100%{opacity:0;}
+}
+
+button{
+  padding:14px 30px;
+  border:none;
+  border-radius:30px;
+  font-size:1.3rem;
+  cursor:pointer;
+  margin:10px;
+}
+
+.love{background:#e91e63;color:white;}
+.no{
+  background:#777;
+  color:white;
+  position:absolute;
+  transition:all .35s ease;
+}
+
+/* พลุ */
+.rocket{
+  position:absolute;
+  bottom:40%;
+  width:4px;
+  height:12px;
+  background:white;
+  animation:launch 1s linear forwards;
+}
+@keyframes launch{
+  to{transform:translateY(-60vh);}
+}
+
+.explode{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  animation:boom 1.6s forwards;
+}
+@keyframes boom{
+  from{transform:scale(0);opacity:1;}
+  to{transform:scale(6);opacity:0;}
+}
+
+/* หัวใจ */
+.heart{
+  position:absolute;
+  font-size:28px;
+  animation:float 2.5s forwards;
+}
+@keyframes float{
+  to{transform:translateY(-160px);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="moon"></div>
+<div class="sea"></div>
+<div class="card" id="card"></div>
+
+<!-- เสียง -->
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/audio/2023/05/09/audio_6a9b92f6c7.mp3">
+</audio>
+<audio id="click">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_20c5ff0b7a.mp3">
+</audio>
+
+<script>
+const card=document.getElementById("card");
+const click=document.getElementById("click");
+
+/* เรื่องเปิด */
+const story=[
+ "ปีนี้เค้าเกือบจะไม่มีอะไรแล้ว",
+ "จนมาเจอแฟน",
+ "ขอบคุณที่เข้ามาในชีวิตเค้านะ"
+];
+let i=0;
+
+function showStory(){
+  if(i<story.length){
+    card.innerHTML=`<p class="fade">${story[i]}</p>`;
+    i++;
+    setTimeout(showStory,4000);
+  }else{
+    ask();
+  }
+}
+showStory();
+
+/* คำถาม */
+function ask(){
+  card.innerHTML=`
+    <h2>แฟนรักเค้ามั้ยยย 💖</h2>
+    <button class="love" onclick="yes()">รักแฟน</button>
+    <button class="no" id="no">ไม่รัก</button>
+  `;
+  dodge();
+}
+
+/* ปุ่มไม่รักหลบ */
+function dodge(){
+  const no=document.getElementById("no");
+  no.onmouseover=()=>{
+    no.style.left=Math.random()*70+"%";
+    no.style.top=Math.random()*70+"%";
+  };
+  no.onclick=()=>{
+    click.play();
+    card.innerHTML="<h2>ไม่รักจริงอ่ออ 😿</h2>";
+    setTimeout(ask,1500);
+  };
+}
+
+/* กดรัก */
+function yes(){
+  click.play();
+  card.innerHTML=`
+    <h1>HAPPY NEW YEAR KUB 🎉</h1>
+    <p>เค้าก็รักแฟนมากก ❤️</p>
+    <p>อยู่กับเค้าไปอีกหลายๆปีเลยนะ</p>
+    <p><b>ห้ามมีกิ๊ก</b></p>
+    <button class="love" onclick="hug()">กอดเค้าหน่อย</button>
+  `;
+  bigFireworks();
+}
+
+/* พลุใหญ่ */
+function bigFireworks(){
+  for(let i=0;i<6;i++){
+    let r=document.createElement("div");
+    r.className="rocket";
+    r.style.left=Math.random()*100+"vw";
+    document.body.appendChild(r);
+
+    setTimeout(()=>{
+      r.remove();
+      for(let j=0;j<12;j++){
+        let e=document.createElement("div");
+        e.className="explode";
+        e.style.left=r.style.left;
+        e.style.top=Math.random()*40+"vh";
+        e.style.background=`hsl(${Math.random()*360},100%,70%)`;
+        document.body.appendChild(e);
+        setTimeout(()=>e.remove(),1600);
+      }
+    },900);
+  }
+}
+
+/* กอด */
+function hug(){
+  for(let i=0;i<18;i++){
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerText="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.bottom="40%";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),2500);
+  }
+}
+
+/* พลุพื้นหลัง */
+setInterval(()=>{
+  let r=document.createElement("div");
+  r.className="rocket";
+  r.style.left=Math.random()*100+"vw";
+  document.body.appendChild(r);
+
+  setTimeout(()=>{
+    r.remove();
+    for(let j=0;j<8;j++){
+      let e=document.createElement("div");
+      e.className="explode";
+      e.style.left=r.style.left;
+      e.style.top=Math.random()*40+"vh";
+      e.style.background=`hsl(${Math.random()*360},100%,70%)`;
+      document.body.appendChild(e);
+      setTimeout(()=>e.remove(),1600);
+    }
+  },900);
+},1400);
+</script>
+
+</body>
+</html>
